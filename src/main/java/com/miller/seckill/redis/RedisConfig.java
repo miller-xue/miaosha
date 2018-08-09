@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by miller on 2018/8/8
  * @author Miller
+ * redis配置文件
  */
 @Getter
 @Setter
