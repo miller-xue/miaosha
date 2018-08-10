@@ -65,7 +65,7 @@ public class JsonUtil {
         } else if (clazz == long.class || clazz == Long.class) {
             return String.valueOf(object);
         }
-        return JSON.toJSONString(object, config);
+        return JSON.toJSONString(object);
     }
 
 

@@ -40,7 +40,7 @@
             <div class="row">
                 <label class="form-label col-md-4">请输入密码</label>
                 <div class="col-md-5">
-                    <input id="password" name="password" class="form-control" type="password"  placeholder="密码" required="true" minlength="6" maxlength="16" />
+                    <input id="password" name="password" class="form-control" type="password"  placeholder="密码" required="true" minlength="5" maxlength="16" />
                 </div>
             </div>
         </div>
@@ -68,18 +68,23 @@
     function doLogin() {
         g_showLoading();
         var pass = $("#password").val();
-        var str  = g_passsword_salt.charAt(0) + g_passsword_salt.charAt(2) + pass + g_passsword_salt.charAt(5) + g_passsword_salt.charAt(4);
-        var password = md5(str);
+        var str = g_passsword_salt.charAt(0) + g_passsword_salt.charAt(2) + pass + g_passsword_salt.charAt(5) + g_passsword_salt.charAt(4);
+        var formPass = md5(str);
         $.ajax({
             url: '/login/do_login',
             type: 'POST',
             data: {
                 mobile: $("#mobile").val(),
-                password: password
+                password: formPass
             },
-            success: function (data) {
+            success: function (result) {
                 layer.closeAll();
-                console.log(data);
+                if (result.code == 0) {
+                    layer.msg("成功")
+                    window.location.href = "/goods/to_list"
+                }else {
+                    layer.msg(result.msg)
+                }
             },
             error: function () {
                 layer.closeAll();

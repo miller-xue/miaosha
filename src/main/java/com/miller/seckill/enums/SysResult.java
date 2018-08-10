@@ -1,5 +1,6 @@
 package com.miller.seckill.enums;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,12 +9,18 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public enum SysResult implements BaseResult {
     SUCCESS(0, "请求成功"),
-    PASSWORD_EMPTY(500210, "密码不能为空"),
-    MOBILE_EMPTY(500220, "手机号不能为空"),
+    SERVER_ERROR(1, "服务器忙"),
+    BIND_ERROR(2, "参数校验异常:%s"),
     ;
 
     private int code;
     private String msg;
+
+    public SysResult fillArgs(Object... args) {
+        this.msg = String.format(this.msg, args);
+        return this;
+    }
 }

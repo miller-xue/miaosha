@@ -1,4 +1,4 @@
-package com.miller.seckill.dao;
+package com.miller.seckill.mapper;
 
 import com.miller.seckill.domain.TestUser;
 import org.apache.ibatis.annotations.Insert;

@@ -2,13 +2,20 @@ package com.miller.seckill.controller;
 
 import com.miller.seckill.common.Result;
 import com.miller.seckill.enums.SysResult;
+import com.miller.seckill.enums.UserResult;
 import com.miller.seckill.praam.LoginParam;
+import com.miller.seckill.service.UserService;
 import com.miller.seckill.util.JsonUtil;
+import com.miller.seckill.util.ValidatorUtil;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 /**
  * Created by miller on 2018/8/9
@@ -20,6 +27,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Log4j
 public class LoginController {
 
+
+    @Autowired
+    private UserService userService;
+
+
     @RequestMapping("/to_login")
     public String toLogin() {
         return "login";
@@ -27,18 +39,10 @@ public class LoginController {
 
     @RequestMapping("/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(LoginParam loginParam) {
-        log.info(JsonUtil.toJSONString(loginParam));
-        //参数校验
-        String passInput = loginParam.getPassword();
-        String mobile = loginParam.getMobile();
-        if (StringUtils.isBlank(passInput)) {
-            return Result.error(SysResult.PASSWORD_EMPTY);
-        }
-        if (StringUtils.isBlank(mobile)) {
-            return Result.error(SysResult.MOBILE_EMPTY);
-        }
-
-        return null;
+    public Result doLogin(@Valid LoginParam loginParam,
+                          HttpServletResponse response) {
+        userService.login(loginParam,response);
+        // 2.登陆
+        return Result.success();
     }
 }

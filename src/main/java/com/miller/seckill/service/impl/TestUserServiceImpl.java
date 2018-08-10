@@ -1,6 +1,6 @@
 package com.miller.seckill.service.impl;
 
-import com.miller.seckill.dao.TestUserMapper;
+import com.miller.seckill.mapper.TestUserMapper;
 import com.miller.seckill.domain.TestUser;
 import com.miller.seckill.service.TestUserService;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ import javax.annotation.Resource;
 public class TestUserServiceImpl implements TestUserService {
 
     @Resource
-    private TestUserMapper userMapper;
+    private TestUserMapper testUserMapper;
 
 
     @Override
     public TestUser getById(int id) {
-        return userMapper.selectById(id);
+        return testUserMapper.selectById(id);
     }
 
     @Override
@@ -28,8 +28,8 @@ public class TestUserServiceImpl implements TestUserService {
     public boolean tx() {
         TestUser tom = TestUser.builder().id(2).name("tom").build();
         TestUser miller = TestUser.builder().id(1).name("miller").build();
-        userMapper.insert(tom);
-        userMapper.insert(miller);
+        testUserMapper.insert(tom);
+        testUserMapper.insert(miller);
         return true;
     }
 }
