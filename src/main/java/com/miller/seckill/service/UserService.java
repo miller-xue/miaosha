@@ -14,5 +14,5 @@ public interface UserService {
 
     void login(LoginParam param, HttpServletResponse response);
 
-    User getByToken(String token);
+    User getByToken(String token,HttpServletResponse response);
 }

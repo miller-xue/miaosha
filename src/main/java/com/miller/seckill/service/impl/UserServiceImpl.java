@@ -51,23 +51,31 @@ public class UserServiceImpl implements UserService {
         if (!dbPass.equals(caclPass)) {
             throw new ParamException(UserResult.PASSWORD_ERROR);
         }
-        // 生成Cookie
         String token = UUIDUtil.uuid();
-        redisService.set(UserKey.token, token, exist
-        );
+        addCookie(exist, token, response);
+    }
+
+    @Override
+    public User getByToken(String token, HttpServletResponse response) {
+
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
+        User user = redisService.get(UserKey.token, token, User.class);
+        if (user != null) {
+            addCookie(user, token, response);
+        }
+        // 延长token有效期
+
+        return user;
+    }
+
+    private void addCookie(User user, String token, HttpServletResponse response) {
+        redisService.set(UserKey.token, token, user);
 
         Cookie cookie = new Cookie(SysConstants.COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(UserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
-        // session
-    }
-
-    @Override
-    public User getByToken(String token) {
-        if (StringUtils.isBlank(token)) {
-            return null;
-        }
-        return redisService.get(UserKey.token, token, User.class);
     }
 }

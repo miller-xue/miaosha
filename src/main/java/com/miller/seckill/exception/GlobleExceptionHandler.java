@@ -28,6 +28,7 @@ public class GlobleExceptionHandler {
      */
     @ExceptionHandler(value = BindException.class)
     public Result bindExceptionHandler(BindException e) {
+        e.printStackTrace();
         List<ObjectError> allErrors = e.getAllErrors();
         ObjectError objectError = allErrors.get(0);
         return Result.error(SysResult.BIND_ERROR.fillArgs(objectError.getDefaultMessage()));
@@ -35,7 +36,9 @@ public class GlobleExceptionHandler {
 
 
     @ExceptionHandler(value = GlobleException.class)
-    public Result globleExceptionHandler(GlobleException e) {
+    public Result globleExceptionHandler(GlobleException e)
+    {
+        e.printStackTrace();
         return Result.error(e.getBaseResult());
     }
 
