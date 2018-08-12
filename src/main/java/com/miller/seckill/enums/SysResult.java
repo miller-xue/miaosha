@@ -9,7 +9,6 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public enum SysResult implements BaseResult {
     SUCCESS(0, "请求成功"),
     SERVER_ERROR(1, "服务器忙"),
