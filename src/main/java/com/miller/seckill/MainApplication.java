@@ -22,7 +22,7 @@ public class MainApplication {
     }
 
 
-    @Bean
+    /*@Bean
     public FilterRegistrationBean filterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         LoginFilter loginFilter = new LoginFilter();
@@ -37,5 +37,5 @@ public class MainApplication {
         registrationBean.setInitParameters(params);
 
         return registrationBean;
-    }
+    }*/
 }

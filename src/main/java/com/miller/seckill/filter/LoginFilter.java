@@ -17,6 +17,8 @@ import java.io.IOException;
 /**
  * Created by miller on 2018/7/28
  * @author Miller
+ * TODO 1.白名单过滤
+ * TODO 2.静态资源过滤 3./根节点的跳转（项目配置）
  */
 @Slf4j
 public class LoginFilter implements Filter {
@@ -31,8 +33,7 @@ public class LoginFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        String requestURI = req.getRequestURI();
-
+        // 1.过滤静态资源
         if(req.getRequestURI().indexOf(".") > 0){
             filterChain.doFilter(servletRequest, servletResponse);
             return;

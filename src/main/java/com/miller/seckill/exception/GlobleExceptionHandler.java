@@ -34,7 +34,11 @@ public class GlobleExceptionHandler {
         return Result.error(SysResult.BIND_ERROR.fillArgs(objectError.getDefaultMessage()));
     }
 
-
+    /**
+     * 全局手动抛出参数异常
+     * @param e
+     * @return
+     */
     @ExceptionHandler(value = GlobleException.class)
     public Result globleExceptionHandler(GlobleException e)
     {

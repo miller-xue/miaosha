@@ -22,9 +22,9 @@ import javax.validation.Valid;
  *
  * @author Miller
  */
-@RequestMapping("/login")
-@Controller
 @Log4j
+@Controller
+@RequestMapping("/login")
 public class LoginController {
 
 

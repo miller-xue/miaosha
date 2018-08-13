@@ -38,6 +38,9 @@ public class UserArgumentResolvers implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+
+
+        // TODO 可以从Filter 中的 ThreadLocal 取出对象
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
         // 1.获取tokenName
@@ -51,6 +54,6 @@ public class UserArgumentResolvers implements HandlerMethodArgumentResolver {
         User currentUser = ThreadHolder.getCurrentUser();
 
         String token = StringUtils.isBlank(paramToken) ? cookieToken : paramToken;
-        return userService.getByToken(token,response);
+        return userService.getByToken(token, response);
     }
 }
