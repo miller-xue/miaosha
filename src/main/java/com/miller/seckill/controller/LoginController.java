@@ -41,8 +41,8 @@ public class LoginController {
     @ResponseBody
     public Result doLogin(@Valid LoginParam loginParam,
                           HttpServletResponse response) {
-        userService.login(loginParam,response);
+        String token = userService.login(loginParam, response);
         // 2.登陆
-        return Result.success();
+        return Result.success(token);
     }
 }

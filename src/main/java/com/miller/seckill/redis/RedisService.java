@@ -29,7 +29,7 @@ public class RedisService {
      * @return 实例
      */
     public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
-        if (StringUtils.isBlank(key) || clazz == null) {
+        if (clazz == null) {
             return null;
         }
         @Cleanup Jedis jedis = jedisPool.getResource();
@@ -62,6 +62,12 @@ public class RedisService {
             jedis.setex(realKey, prefix.expireSeconds(), JsonUtil.toJSONNoFeatures(value));
         }
         return true;
+    }
+
+    public boolean delete(KeyPrefix prefix, String key) {
+        @Cleanup Jedis jedis = jedisPool.getResource();
+        String realKey = prefix.getPrefix() + key;
+        return jedis.del(realKey) > 0   ;
     }
 
     /**

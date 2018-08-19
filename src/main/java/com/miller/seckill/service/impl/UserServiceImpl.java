@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by miller on 2018/8/10
  * @author Miller
+ * Service 只能调用Service
  */
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,11 +36,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void login(LoginParam param, HttpServletResponse response) {
+    public String login(LoginParam param, HttpServletResponse response) {
         // 1.常规参数校验
 
         // 2.判断用户是否存在
-        User exist = userMapper.selectByPrimaryKey(Long.valueOf(param.getMobile()));
+        User exist = getById(Long.valueOf(param.getMobile()));
         if (exist == null) {
             throw new ParamException(UserResult.MOBILE_NOT_EXIST);
         }
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
         }
         String token = UUIDUtil.uuid();
         addCookie(exist, token, response);
+        return token;
     }
 
     @Override
@@ -68,6 +70,35 @@ public class UserServiceImpl implements UserService {
         // 延长token有效期
 
         return user;
+    }
+
+    @Override
+    public User getById(long id) {
+        // 取缓存
+        User catchUser = redisService.get(UserKey.getById, "" + id, User.class);
+        if (catchUser != null) {
+            return catchUser;
+        }
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user != null) {
+            redisService.set(UserKey.getById, "" + id, user);
+        }
+        return user;
+    }
+
+    @Override
+    public boolean updatePassword(String token,long id, String password) {
+        User before = getById(id);
+        if (before == null) {
+            throw new ParamException(UserResult.MOBILE_NOT_EXIST);
+        }
+        User after = User.builder().id(id).password(MD5Util.formPassToDBPass(password, before.getSalt())).build();
+        before.setPassword(after.getPassword());
+        // 清除缓存
+        userMapper.updateByPrimaryKeySelective(after);
+        redisService.delete(UserKey.getById, String.valueOf(id));
+        redisService.set(UserKey.token, token, after);
+        return true;
     }
 
     private void addCookie(User user, String token, HttpServletResponse response) {

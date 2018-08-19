@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService {
 
 
-    void login(LoginParam param, HttpServletResponse response);
+    String login(LoginParam param, HttpServletResponse response);
 
     User getByToken(String token,HttpServletResponse response);
+
+    User getById(long id);
+
+    boolean updatePassword(String token,long id, String password);
 }

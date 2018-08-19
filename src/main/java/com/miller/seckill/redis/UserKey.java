@@ -12,4 +12,5 @@ public class UserKey extends BasePrefix {
     }
 
     public static UserKey token = new UserKey(SysConstants.TOKEN_EXPIRE,SysConstants.COOKIE_NAME_TOKEN);
+    public static UserKey getById = new UserKey(0,"id");
 }

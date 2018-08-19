@@ -18,15 +18,15 @@ import java.util.Map;
  * Created by miller on 2018/8/6
  */
 @SpringBootApplication
-public class MainApplication extends SpringBootServletInitializer {
+public class MainApplication  {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(MainApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(MainApplication.class);
+//    }
 
     /*@Bean
     public FilterRegistrationBean filterRegistrationBean() {
