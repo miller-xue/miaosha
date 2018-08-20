@@ -46,10 +46,12 @@
                 <span id="seckillTip"></span>
             </td>
             <td>
-                <form id="seckillForm" method="post" action="/seckill/do_seckill">
+                <!--<form id="seckillForm" method="post" action="/seckill/do_seckill">
                     <button class="btn btn-primary btn-block" type="submit" id="buyBtn">立即秒杀</button>
                     <input type="hidden" name="goodsId" id="goodsId"/>
-                </form>
+                </form>-->
+                <button class="btn btn-primary btn-block" type="button" onclick="doSeckill()" id="buyBtn">立即秒杀</button>
+                <input type="hidden" name="goodsId" id="goodsId"/>
             </td>
         </tr>
         <tr>
@@ -73,14 +75,38 @@
         
         // countDown();
     });
-    
+
+    function doSeckill() {
+        // 获取goodsId
+        $.ajax({
+            url: '/seckill/do_seckill',
+            type: 'POST',
+            data: {goodsId: $("#goodsId").val()},
+            success: function (result) {
+                if (result.code == 0) {
+                    console.log(result);
+                    window.location.href = "/order_detail.htm?orderId=" + result.data.id;
+                }else {
+                    layer.msg(result.msg)
+                }
+            },
+            error: function (error) {
+                layer.msg("秒杀失败")
+            }
+        })
+    }
+
     function getDetail() {
         var goodsId = g_getQueryString("goodsId")
         $.ajax({
             url: '/goods/detail/' + goodsId,
             type: 'get',
             success: function (result) {
-                
+                if (result.code == 0) {
+                    render(result.data);
+                }else {
+                    layer.msg(result.msg)
+                }
             },
             error: function (error) {
                 layer.msg("客户端请求错误")
@@ -88,12 +114,33 @@
 
         })
     }
+    
+    function render(datail) {
+        var seckillStatus = datail.seckillStatus;
+        var remainSeconds = datail.remainSeconds;
+        var goodsVo = datail.goodsVo;
+        var user = datail.user;
+        if (user) {
+            $("#userTip").hide();
+        }
+        $("#goodsName").text(goodsVo.name);
+        $("#goodsImg").attr("src", goodsVo.img);
+        $("#startTime").text(new Date(goodsVo.startDate).format("yyyy-MM-dd hh:mm:ss"));
+        $("#remainSeconds").val(remainSeconds);
+
+        $("#goodsId").val(goodsVo.id);
+        $("#goodsPrice").text(goodsVo.price);
+        $("#seckillPrice").text(goodsVo.seckillPrice);
+        $("#stockCount").text(goodsVo.stockCount);
+        countDown();
+    }
 
     function countDown() {
         var remainSeconds = $("#remainSeconds").val();
         var timeOut;
         if (remainSeconds > 0) {//还没开始,秒杀倒计时
             $("#buyBtn").attr('disabled', true);
+            $("#seckillTip").html("秒杀倒计时:" + remainSeconds + "秒")
             timeOut = setTimeout(function () {
                 $("#countDwon").text(remainSeconds - 1);
                 $("#remainSeconds").val(remainSeconds - 1);

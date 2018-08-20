@@ -1,10 +1,12 @@
 package com.miller.seckill.controller;
 
 import afu.org.checkerframework.checker.units.qual.A;
+import com.miller.seckill.common.Result;
 import com.miller.seckill.domain.Order;
 import com.miller.seckill.domain.SeckillOrder;
 import com.miller.seckill.domain.User;
 import com.miller.seckill.enums.SeckillResult;
+import com.miller.seckill.enums.SysResult;
 import com.miller.seckill.service.GoodsService;
 import com.miller.seckill.service.OrderService;
 import com.miller.seckill.service.SeckillOrderService;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by miller on 2018/8/12
@@ -33,7 +36,7 @@ public class SeckillController {
     @Autowired
     private SeckillService seckillService;
 
-    @RequestMapping(value = "/do_seckill", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/do_seckill", method = RequestMethod.POST)
     public String doSeckill(User user, @RequestParam("goodsId") long id,
                             Model model) {
         if (user == null) {
@@ -80,5 +83,47 @@ public class SeckillController {
         model.addAttribute("order", order);
         model.addAttribute("goods", goodsVoId);
         return "order_detail";
+    }*/
+
+    @RequestMapping(value = "/do_seckill", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<Order> doSeckill(User user, @RequestParam("goodsId") long id) {
+        if (user == null) {
+            return Result.error(SysResult.NO_LOGIN);
+        }
+
+        // 1.判断商品是否存在
+        GoodsVo goodsVoId = goodsService.getGoodsVoId(id);
+        if (goodsVoId == null) {
+            // 进行操作
+            return Result.error(SeckillResult.DATA_REWRITE);
+        }
+        // 2.判断是否在秒杀时间内进行操作
+        long now = System.currentTimeMillis();
+        long startDate = goodsVoId.getStartDate().getTime();
+        long endDate = goodsVoId.getEndeDate().getTime();
+        if (now < startDate) {
+            // 秒杀未开始
+            return Result.error(SeckillResult.DATA_REWRITE);
+        } else if (now > endDate) {
+            // 秒杀结束
+            return Result.error(SeckillResult.END);
+        }
+
+        // 3.判断是否有库存
+        Integer stockCount = goodsVoId.getStockCount();
+        if (stockCount
+                <= 0) {
+            return Result.error(SeckillResult.END);
+        }
+
+        // 判断是否重复秒杀
+        SeckillOrder seckillOrder = seckillOrderService.getByUserIdAndGoodsId(user.getId(), id);
+        if (seckillOrder != null) {
+            return Result.error(SeckillResult.REPEAT_KILL);
+        }
+        // 减库存,下订单,写入秒杀订单
+        Order order = seckillService.seckill(user.getId(), id);
+        return Result.success(order);
     }
 }
