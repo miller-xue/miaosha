@@ -1,6 +1,7 @@
 package com.miller.seckill.service;
 
 import com.miller.seckill.domain.Order;
+import com.miller.seckill.vo.OrderDetailVo;
 import com.sun.tools.corba.se.idl.constExpr.Or;
 
 /**
@@ -9,4 +10,6 @@ import com.sun.tools.corba.se.idl.constExpr.Or;
 public interface OrderService {
 
     Order createOrder(long userId, long goodsId);
+
+    OrderDetailVo getByUserIdAndId(long userId, long id);
 }

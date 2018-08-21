@@ -2,7 +2,10 @@ package com.miller.seckill.service.impl;
 
 import com.miller.seckill.domain.SeckillOrder;
 import com.miller.seckill.mapper.SeckillOrderMapper;
+import com.miller.seckill.redis.OrderKey;
+import com.miller.seckill.redis.RedisService;
 import com.miller.seckill.service.SeckillOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,9 +20,13 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     private SeckillOrderMapper seckillOrderMapper;
 
 
+    @Autowired
+    private RedisService redisService;
+
     @Override
     public SeckillOrder getByUserIdAndGoodsId(long userId, long goodsId) {
-        return seckillOrderMapper.selectByUserIdAndGoodsId(userId,goodsId);
+        return  redisService.get(OrderKey.getSeckillOrderByUIdGId, "" + userId + "_" + goodsId, SeckillOrder.class);
+        /*return seckillOrderMapper.selectByUserIdAndGoodsId(userId,goodsId);*/
     }
 
     @Override

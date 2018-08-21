@@ -38,7 +38,10 @@ public class SeckillServiceImpl implements SeckillService {
         SeckillOrder seckillOrder = seckillOrderService.createSeckillOrder(userId, goodsId, order.getId());
 
         // 执行秒杀操作
-        seckillGoodsService.reduceStock(goodsId, new Date(System.currentTimeMillis()));
+        int i = seckillGoodsService.reduceStock(goodsId, new Date(System.currentTimeMillis()));
+        if (i <= 0) {
+            //秒杀失败
+        }
         return order;
     }
 }

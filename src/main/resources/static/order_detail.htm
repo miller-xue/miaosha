@@ -69,4 +69,56 @@
     </table>
 </div>
 </body>
-</html></td>
+</html>
+<script>
+    $(function(){
+        loadOrderDetail();
+
+        function loadOrderDetail(){
+            $.ajax({
+                url: '/order/detail',
+                type: 'POST',
+                data: {orderId: g_getQueryString("orderId")},
+                success: function (result) {
+                    if (result.code == 0) {
+                        render(result.data);
+                    }else {
+                        layer.msg(result.msg);
+                    }
+
+                },
+                error: function () {
+                    layer.msg("客户端请求错误")
+
+                }
+            })
+        }
+
+        function render(orderDetail) {
+            var goods = orderDetail.goods;
+            var order = orderDetail.order;
+            $("#goodsName").text(goods.name);
+            $("#goodsImg").attr("src", goods.img);
+
+            $("#orderPrice").text(order.goodsPrice);
+            $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
+            var status = order.status;
+            var statusText = '';
+            if (status == 0) {
+                statusText = '未支付';
+            }else if (status == 1) {
+                statusText = '待发货';
+            }else if (status == 2) {
+                statusText = '已发货';
+            }else if (status == 3) {
+                statusText = '已收货';
+            }else if (status == 4) {
+                statusText = '已退款';
+            }else if (status == 5) {
+                statusText = '已完成';
+            }
+
+            $("#orderStatus").text(statusText);
+        }
+    })
+</script>
