@@ -21,13 +21,13 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.miller.seckill.domain.SeckillOrder" >
-    insert into seckill_order (id, user_id, goods_id, 
+    insert ignore into seckill_order (id, user_id, goods_id,
       order_id)
     values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, 
       #{orderId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.miller.seckill.domain.SeckillOrder" >
-    insert into seckill_order
+    insert ignore into seckill_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,

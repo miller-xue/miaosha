@@ -1,6 +1,8 @@
 package com.miller.seckill.service.impl;
 
 import com.miller.seckill.domain.SeckillOrder;
+import com.miller.seckill.enums.SeckillResult;
+import com.miller.seckill.exception.ParamException;
 import com.miller.seckill.mapper.SeckillOrderMapper;
 import com.miller.seckill.redis.OrderKey;
 import com.miller.seckill.redis.RedisService;
@@ -30,10 +32,9 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     }
 
     @Override
-    public SeckillOrder createSeckillOrder(long userId, long goodsId, long orderId) {
+    public int createSeckillOrder(long userId, long goodsId, long orderId) {
         SeckillOrder seckillOrder = SeckillOrder.builder().goodsId(goodsId).userId(userId).orderId(orderId).build();
-        int i = seckillOrderMapper.insertSelective(seckillOrder);
-        return seckillOrder;
+        return seckillOrderMapper.insertSelective(seckillOrder);
     }
 
 }

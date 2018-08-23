@@ -2,6 +2,7 @@ package com.miller.seckill.controller;
 
 import com.miller.seckill.common.Result;
 import com.miller.seckill.domain.TestUser;
+import com.miller.seckill.rabbitmq.MQSender;
 import com.miller.seckill.redis.RedisService;
 import com.miller.seckill.redis.TestUserKey;
 import com.miller.seckill.service.TestUserService;
@@ -23,6 +24,16 @@ public class SampleController {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private MQSender sender;
+
+    @ResponseBody
+    @RequestMapping(value = "/mq")
+    public Result mq() {
+        sender.send("我我我我");
+        return Result.success();
+    }
 
 
     @RequestMapping

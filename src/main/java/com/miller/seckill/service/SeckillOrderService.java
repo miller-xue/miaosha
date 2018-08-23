@@ -9,5 +9,5 @@ public interface SeckillOrderService {
 
     SeckillOrder getByUserIdAndGoodsId(long userId, long goodsId);
 
-    SeckillOrder createSeckillOrder(long userId, long goodsId, long orderId);
+    int createSeckillOrder(long userId, long goodsId, long orderId);
 }
