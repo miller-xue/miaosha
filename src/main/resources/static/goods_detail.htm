@@ -84,8 +84,45 @@
             data: {goodsId: $("#goodsId").val()},
             success: function (result) {
                 if (result.code == 0) {
-                    console.log(result);
-                    window.location.href = "/order_detail.htm?orderId=" + result.data.id;
+
+                    getSeckillResult($("#goodsId").val());
+                    /*console.log(result);
+                    window.location.href = "/order_detail.htm?orderId=" + result.data.id;*/
+                }else {
+                    layer.msg(result.msg)
+                }
+            },
+            error: function (error) {
+                layer.msg("秒杀失败")
+            }
+        })
+    }
+
+    function getSeckillResult(goodsId) {
+        g_showLoading();
+        $.ajax({
+            url: '/seckill/result',
+            type: 'POST',
+            data: {goodsId: goodsId},
+            success: function (result) {
+                if (result.code == 0) {
+                    var data = result.data;
+                    console.log(data)
+                    if (data < 0) {
+                        layer.msg("秒杀失败")
+                    }else if (data == 0) {
+                        setTimeout(function () {
+                            getSeckillResult($("#goodsId").val());
+                        }, 50);
+                    }else {
+                        layer.confirm("恭喜你,秒杀成功!查看订单",{btn:["确定","取消"]},
+                            function () {
+                                window.location.href = "/order_detail.htm?orderId=" + data;
+                            },function () {
+                                layer.closeAll();
+                            }
+                        )
+                    }
                 }else {
                     layer.msg(result.msg)
                 }
@@ -104,6 +141,7 @@
             success: function (result) {
                 if (result.code == 0) {
                     render(result.data);
+
                 }else {
                     layer.msg(result.msg)
                 }

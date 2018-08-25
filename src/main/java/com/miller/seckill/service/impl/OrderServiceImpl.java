@@ -2,6 +2,7 @@ package com.miller.seckill.service.impl;
 
 import afu.org.checkerframework.checker.units.qual.A;
 import com.miller.seckill.domain.Order;
+import com.miller.seckill.domain.SeckillOrder;
 import com.miller.seckill.enums.OrderResult;
 import com.miller.seckill.exception.ParamException;
 import com.miller.seckill.mapper.OrderMapper;
@@ -33,6 +34,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private RedisService redisService;
+
+    @Override
+    public Order getByUserIdAndGoodsId(long userId, long goodsId) {
+        return  redisService.get(OrderKey.getSeckillOrderByUIdGId, "" + userId + "_" + goodsId, Order.class);
+        /*return seckillOrderMapper.selectByUserIdAndGoodsId(userId,goodsId);*/
+    }
 
     @Override
     public Order createOrder(long userId, long goodsId) {

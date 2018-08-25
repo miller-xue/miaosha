@@ -1,14 +1,9 @@
 package com.miller.seckill.controller;
 
 import com.miller.seckill.common.Result;
-import com.miller.seckill.enums.SysResult;
-import com.miller.seckill.enums.UserResult;
-import com.miller.seckill.praam.LoginParam;
+import com.miller.seckill.param.LoginParam;
 import com.miller.seckill.service.UserService;
-import com.miller.seckill.util.JsonUtil;
-import com.miller.seckill.util.ValidatorUtil;
 import lombok.extern.log4j.Log4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

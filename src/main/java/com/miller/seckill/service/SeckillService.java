@@ -14,4 +14,6 @@ public interface SeckillService {
      * @param goodsId
      */
     Order seckill(long userId, long goodsId);
+
+    long getSeckillResult(long userId, long goodsId);
 }

@@ -28,12 +28,33 @@ public class SampleController {
     @Autowired
     private MQSender sender;
 
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping(value = "/mq")
     public Result mq() {
         sender.send("我我我我");
         return Result.success();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/mq/topic")
+    public Result topic() {
+        sender.sendTopic("我我我我");
+        return Result.success();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/mq/fanout")
+    public Result fanout() {
+        sender.sendFanout("我我我我");
+        return Result.success();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/mq/headers")
+    public Result headers() {
+        sender.sendHeaders("我我我我");
+        return Result.success();
+    }*/
 
 
     @RequestMapping

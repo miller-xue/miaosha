@@ -84,6 +84,6 @@ public class JsonUtil {
         }else if(clazz == long.class || clazz == Long.class) {
             return  (T)Long.valueOf(text);
         }
-        return JSON.parseObject(text, clazz);
+        return JSON.toJavaObject(JSON.parseObject(text), clazz);
     }
 }

@@ -25,11 +25,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     @Autowired
     private RedisService redisService;
 
-    @Override
-    public SeckillOrder getByUserIdAndGoodsId(long userId, long goodsId) {
-        return  redisService.get(OrderKey.getSeckillOrderByUIdGId, "" + userId + "_" + goodsId, SeckillOrder.class);
-        /*return seckillOrderMapper.selectByUserIdAndGoodsId(userId,goodsId);*/
-    }
+
 
     @Override
     public int createSeckillOrder(long userId, long goodsId, long orderId) {

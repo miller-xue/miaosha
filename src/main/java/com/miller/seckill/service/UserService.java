@@ -1,7 +1,7 @@
 package com.miller.seckill.service;
 
 import com.miller.seckill.domain.User;
-import com.miller.seckill.praam.LoginParam;
+import com.miller.seckill.param.LoginParam;
 
 import javax.servlet.http.HttpServletResponse;
 

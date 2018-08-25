@@ -1,4 +1,4 @@
-package com.miller.seckill.praam;
+package com.miller.seckill.param;
 
 import com.miller.seckill.validator.IsMobile;
 import lombok.Getter;
