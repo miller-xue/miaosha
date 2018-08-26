@@ -14,6 +14,8 @@ public enum SysResult implements BaseResult {
     SERVER_ERROR(1, "服务器忙"),
     NO_LOGIN(-1, "未登陆"),
     BIND_ERROR(2, "参数校验异常:%s"),
+
+    ACCESS_LIMIT(4, "访问频繁"),
     ;
 
     private int code;

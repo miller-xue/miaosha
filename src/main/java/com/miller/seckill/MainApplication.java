@@ -2,6 +2,7 @@ package com.miller.seckill;
 
 import com.google.common.collect.Maps;
 import com.miller.seckill.filter.LoginFilter;
+import com.miller.seckill.filter.ThreadHolderFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -44,4 +45,22 @@ public class MainApplication  {
 
         return registrationBean;
     }*/
+
+    @Bean
+    public FilterRegistrationBean  ThreadHolderFilterRegistrationBean() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+
+        ThreadHolderFilter loginFilter = new ThreadHolderFilter();
+
+        registrationBean.setFilter(loginFilter);
+
+        List<String> urlPatterns = new ArrayList<String>();
+        urlPatterns.add("/*");
+        registrationBean.setUrlPatterns(urlPatterns);
+
+        Map<String, String> params = Maps.newHashMap();
+        params.put("targetFilterLifecycle", "true");
+        registrationBean.setInitParameters(params);
+        return registrationBean;
+    }
 }
